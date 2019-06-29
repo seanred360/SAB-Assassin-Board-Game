@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AssassinBoardGame;
 
 public class EnemyDeath : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class EnemyDeath : MonoBehaviour
 
     // reference to Board component
     Board m_board;
+    AudioManager m_audioManager;
 
     // delay before enemy death
     public float deathDelay = 0f;
@@ -28,6 +30,7 @@ public class EnemyDeath : MonoBehaviour
     void Awake()
     {
         m_board = Object.FindObjectOfType<Board>().GetComponent<Board>();
+        m_audioManager = Object.FindObjectOfType<AudioManager>().GetComponent<AudioManager>();
     }
 
     // move the enemy to a target position
@@ -51,8 +54,10 @@ public class EnemyDeath : MonoBehaviour
 
     IEnumerator DieRoutine()
     {
+        m_audioManager.PlaySFX(0);
         // wait for a short delay before the enemy death
         yield return new WaitForSeconds(deathDelay);
+        m_audioManager.PlaySFX(3);
 
         // get an offscreen position directly above us off camera
         Vector3 offscreenPos = transform.position + offscreenOffset;
